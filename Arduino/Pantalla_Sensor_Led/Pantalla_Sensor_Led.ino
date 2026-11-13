@@ -10,6 +10,8 @@
 // Inicializamos el sensor DHT11
 DHT dht(DHTPIN, DHTTYPE);
 
+//zumbador
+#define BUZZERPIN 23
 //Led
 #define LEDPIN 25
 #define UMBRAL_LUZ 2000
@@ -41,6 +43,8 @@ void setup() {
   dht.begin();
   pinMode(LDRPIN, INPUT);
 
+  //Zumbador
+  pinMode(BUZZERPIN, OUTPUT);
   //led
   pinMode(LEDPIN, OUTPUT);
 
@@ -67,11 +71,13 @@ void loop() {
   Serial.print("Estado luminosidad: ");
   Serial.println(luz);
 
-  // Control del LED
+  // Control del LED y zumbador
   if (luz > UMBRAL_LUZ) {
       digitalWrite(LEDPIN, HIGH);
+      tone(BUZZERPIN, 1000, 1000);
   } else {
       digitalWrite(LEDPIN, LOW);
+      noTone(BUZZERPIN);
 }
   //Humedad 
   //Da unos 330-350 en el aire
