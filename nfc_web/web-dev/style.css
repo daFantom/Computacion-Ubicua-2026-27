@@ -1,0 +1,182 @@
+:root {
+  --verde: #2E7D32;
+  --verde-claro: #e8f5e9;
+  --rojo: #d32f2f;
+  --rojo-claro: #ffebee;
+  --azul: #1976d2;
+  --naranja: #ef6c00;
+  --gris: #666;
+  --borde: #e0e0e0;
+  --bg: #f4f7f6;
+  --card: #ffffff;
+}
+* { box-sizing: border-box; }
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg);
+  color: #222;
+  margin: 0;
+  padding: 0 0 40px;
+}
+header {
+  background: var(--verde);
+  color: #fff;
+  padding: 18px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,.15);
+}
+header h1 { margin: 0; font-size: 1.25rem; }
+header p  { margin: 2px 0 0; font-size: .8rem; opacity: .9; }
+
+.pill {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: .75rem;
+  font-weight: 600;
+  background: rgba(255,255,255,.2);
+  display: flex; align-items: center; gap: 6px;
+}
+.pill .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #ccc;
+}
+.pill.ok    .dot { background: #8effa0; box-shadow: 0 0 6px #8effa0; }
+.pill.err   .dot { background: #ff8c8c; }
+.pill.warn  .dot { background: #ffd166; }
+
+main {
+  max-width: 1100px;
+  margin: 24px auto;
+  padding: 0 16px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+}
+.kpi {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.05);
+  border-left: 5px solid var(--verde);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.kpi.alerta { border-left-color: var(--rojo); }
+.kpi h3 {
+  margin: 0 0 6px;
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--gris);
+}
+.kpi .val {
+  font-size: 1.8rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.kpi .unit {
+  font-size: .95rem;
+  font-weight: 500;
+  color: var(--gris);
+  margin-left: 3px;
+}
+.kpi .icon { font-size: 2rem; opacity: .85; }
+
+.panel {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.05);
+}
+.panel h2 {
+  margin: 0 0 14px;
+  font-size: 1rem;
+  letter-spacing: .02em;
+}
+.panel-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+@media (max-width: 760px) { .panel-row { grid-template-columns: 1fr; } }
+
+.chart-wrap { position: relative; height: 260px; }
+
+.estado-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+}
+.estado-item {
+  background: #fafafa;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  padding: 10px;
+  font-size: .85rem;
+}
+.estado-item .k { color: var(--gris); font-size: .7rem; text-transform: uppercase; letter-spacing: .04em; }
+.estado-item .v { font-weight: 700; margin-top: 3px; }
+.estado-item .v.on  { color: var(--verde); }
+.estado-item .v.off { color: var(--gris); }
+.estado-item .v.alerta { color: var(--rojo); }
+
+.controles {
+  display: flex; flex-wrap: wrap; gap: 10px;
+}
+button {
+  font: inherit;
+  border: none;
+  background: var(--verde);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: .85rem;
+  transition: filter .15s;
+}
+button:hover { filter: brightness(1.08); }
+button:disabled { opacity: .5; cursor: wait; }
+button.gris  { background: #607d8b; }
+button.rojo  { background: var(--rojo); }
+button.azul  { background: var(--azul); }
+
+.form {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  align-items: end;
+}
+label { display: block; font-size: .78rem; color: var(--gris); margin-bottom: 4px; }
+input[type="number"], select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+  font: inherit;
+}
+
+.log {
+  max-height: 240px;
+  overflow-y: auto;
+  font-family: 'Consolas', 'Menlo', monospace;
+  font-size: .8rem;
+  background: #1e1e1e;
+  color: #d4d4d4;
+  border-radius: 8px;
+  padding: 12px;
+}
+.log div { padding: 2px 0; border-bottom: 1px solid #2a2a2a; }
+.log .ts { color: #6a9955; }
+.log .ok { color: #8effa0; }
+.log .ko { color: #ff8c8c; }
+.log .info { color: #4fc1ff; }

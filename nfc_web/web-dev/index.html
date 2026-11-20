@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Invernadero · Panel</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/mqtt@5.10.1/dist/mqtt.min.js"></script>
+</head>
+<body>
+  <!-- mismo body que la respuesta anterior -->
+  <header>
+    <div>
+      <h1>Invernadero · Panel de control</h1>
+      <p>ESP32 + MQTT + Docker · PECL2</p>
+    </div>
+    <div style="display:flex; gap:8px;">
+      <div class="pill" id="pill-mqtt"><span class="dot"></span> MQTT</div>
+      <div class="pill" id="pill-dispo"><span class="dot"></span> ESP32</div>
+    </div>
+  </header>
+
+  <main>
+    <section class="kpis">
+      <div class="kpi"><div><h3>Temperatura</h3><div class="val"><span id="v-temp">—</span><span class="unit">°C</span></div></div><div class="icon">🌡️</div></div>
+      <div class="kpi"><div><h3>Humedad aire</h3><div class="val"><span id="v-hum">—</span><span class="unit">%</span></div></div><div class="icon">💧</div></div>
+      <div class="kpi" id="kpi-suelo"><div><h3>Humedad suelo</h3><div class="val"><span id="v-suelo">—</span><span class="unit">%</span></div></div><div class="icon">🌿</div></div>
+      <div class="kpi"><div><h3>Luz (LDR)</h3><div class="val"><span id="v-luz">—</span><span class="unit">ADC</span></div></div><div class="icon">☀️</div></div>
+    </section>
+
+    <section class="panel">
+      <h2>Histórico reciente (REST del backend)</h2>
+      <div class="chart-wrap"><canvas id="chart"></canvas></div>
+    </section>
+
+    <div class="panel-row">
+      <section class="panel">
+        <h2>Estado de actuadores</h2>
+        <div class="estado-grid">
+          <div class="estado-item"><div class="k">Bomba</div><div class="v" id="s-bomba">—</div></div>
+          <div class="estado-item"><div class="k">Origen</div><div class="v" id="s-origen">—</div></div>
+          <div class="estado-item"><div class="k">LED</div><div class="v" id="s-led">—</div></div>
+          <div class="estado-item"><div class="k">Modo LED</div><div class="v" id="s-modoled">—</div></div>
+          <div class="estado-item"><div class="k">Zumbador</div><div class="v" id="s-zumb">—</div></div>
+          <div class="estado-item"><div class="k">Modo riego</div><div class="v" id="s-modoriego">—</div></div>
+          <div class="estado-item"><div class="k">Umbral suelo</div><div class="v" id="s-usuelo">—</div></div>
+          <div class="estado-item"><div class="k">Umbral luz</div><div class="v" id="s-uluz">—</div></div>
+          <div class="estado-item"><div class="k">RSSI WiFi</div><div class="v" id="s-rssi">—</div></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Control manual</h2>
+        <div class="controles">
+          <button class="azul" id="btn-riego">💦 Regar 5 s</button>
+          <button class="rojo" id="btn-stop">⏹ Parar bomba</button>
+          <button class="gris" id="btn-led-on">💡 LED on</button>
+          <button class="gris" id="btn-led-off">🌑 LED off</button>
+          <button class="gris" id="btn-led-auto">🤖 LED auto</button>
+          <button class="gris" id="btn-buzz">🔔 Probar zumbador</button>
+          <button class="gris" id="btn-modo-auto">♻️ Riego auto</button>
+          <button class="gris" id="btn-modo-man">✋ Riego manual</button>
+        </div>
+        <div class="form">
+          <div><label>Umbral suelo (%)</label><input type="number" id="in-usuelo" min="0" max="100" step="1" value="30" /></div>
+          <div><label>Umbral luz (ADC)</label><input type="number" id="in-uluz" min="0" max="4095" step="10" value="2000" /></div>
+          <button id="btn-aplicar">Aplicar umbrales</button>
+        </div>
+      </section>
+    </div>
+
+    <section class="panel">
+      <h2>Registro de eventos</h2>
+      <div class="log" id="log"></div>
+    </section>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
