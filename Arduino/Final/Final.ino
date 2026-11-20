@@ -28,6 +28,8 @@ DHT dht(DHTPIN, DHTTYPE);
 // Tiempo de activacion de la bomba
 #define TIEMPO_RIEGO 2000
 
+// Tiempo de espera entre riegos
+#define TIEMPO_ESPERA_RIEGO 30000
 // PANTALLA OLED
 
 #include <Wire.h>
@@ -60,7 +62,9 @@ bool sueloSeco = false;
 
 // Control del riego
 unsigned long tiempoInicioRiego = 0;
+unsigned long ultimoRiego = 0;
 bool regando = false;
+bool riegoRealizado = false;
 
 // SETUP
 
@@ -131,22 +135,28 @@ void loop() {
 
   // CONTROL DE LA BOMBA
 
-  if (sueloSeco && !regando) {
-
-    // Activar bomba
-    digitalWrite(RELEPIN, LOW);
-
-    tiempoInicioRiego = millis();
-    regando = true;
+  // Comprobar si se puede iniciar un riego
+  if (sueloSeco && !regando && (!riegoRealizado || millis() - ultimoRiego >= TIEMPO_ESPERA_RIEGO)) {
+      // Activar bomba
+      digitalWrite(RELEPIN, LOW);
+      tiempoInicioRiego = millis();
+      regando = true;
   }
 
   // Desactivar bomba tras 2 segundos
-  if (regando &&
-      millis() - tiempoInicioRiego >= TIEMPO_RIEGO) {
-
-    digitalWrite(RELEPIN, HIGH);
-    regando = false;
+  if (regando && millis() - tiempoInicioRiego >= TIEMPO_RIEGO) {
+      digitalWrite(RELEPIN, HIGH);
+      regando = false;
+      // Registrar el momento del ultimo riego
+      ultimoRiego = millis();
+      riegoRealizado = true;
   }
+
+    // Desactivar bomba tras 2 segundos
+    if (regando && millis() - tiempoInicioRiego >= TIEMPO_RIEGO) {
+      digitalWrite(RELEPIN, HIGH);
+      regando = false;
+    }
 
   // CONTROL DEL ZUMBADOR
  
